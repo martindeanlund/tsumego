@@ -9,14 +9,16 @@ class GridNode {
 
 class Group {
 	
-  constructor(node) {
+  constructor(node, color) {
+	this.color = color;
     this.nodes = [node];
-	this.liberties = getAdjacentGridNodes(node).filter((node) => node.color == null);
+	this.liberties = getAdjacentGridNodes(node).filter((node) => node.color != color);
   }
   
   removeLiberty(x, y) {
 	this.liberties = this.liberties.filter((liberty) => !(liberty.x == x && liberty.y == y));
-	if (this.liberties.length < 1) {
+	var openLiberty = this.liberties.find(g => grid[g.x][g.y] == null);
+	if (openLiberty == null) {
 	  return this.capture();
 	}
 	return [];
@@ -93,7 +95,7 @@ function move(char_x, char_y, color) {
 		captures = captures.concat(foe.removeLiberty(x, y));
 	});
 	  
-    var newGroup = new Group(node);
+    var newGroup = new Group(node, color);
     groups.push(newGroup);
 	
     for (i=0;i<friends.length;i++) {
