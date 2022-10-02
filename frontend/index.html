@@ -1,5 +1,183 @@
 <html>
+<head>
+  <style>
+	.grid {
+	    width: 100%;
+		height: 100%;
+		margin: 0;
+		background-image: 
+			repeating-linear-gradient(#000 0 1px, transparent 1px 100%),
+			repeating-linear-gradient(90deg, #000 0 1px, transparent 1px 100%);
+		background-size: 50px 50px;
+	}
+	
+	.playarea {
+	  display: flex;
+	 }
+	
+	.board {
+	  margin: 0;
+	  height: 401px;
+	  width: 401px;
+	  padding: 25px;
+	  background-color: #DAB888;
+	 }
+	 
+	.game {
+	    margin-left: -451px;
+		height: 451px;
+		width: 451px;
+		padding: 0;
+		display: grid;
+		grid-template-columns: 50px 50px 50px 50px 50px 50px 50px 50px 50px;
+	}
+	
+	.game div {
+		height: 50px;
+		width: 50px;
+		margin: 0;
+		padding: 0;
+		border-radius: 50%;
+		display: inline-block;
+	}
+	
+	.b_stone {
+		background-color: #000;
+	}
+	
+	.w_stone {
+	    background-color: #FFF;
+	}
+	
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <script>
+	function toggle(stone) {
+		if ($(stone).hasClass("b_stone")) {
+			$(stone).removeClass("b_stone");
+			$(stone).addClass("w_stone");
+		} else if ($(stone).hasClass("w_stone")) {
+			$(stone).removeClass("w_stone");
+		} else {
+			$(stone).addClass("b_stone");
+		}
+	}
+	
+	$(function() {
+	    console.log('ready!');
+		$('div.game div').click(function() {
+			if ($(this).hasClass("b_stone")) {
+				$(this).removeClass("b_stone");
+				$(this).addClass("w_stone");
+			} else if ($(this).hasClass("w_stone")) {
+				$(this).removeClass("w_stone");
+			} else {
+				$(this).addClass("b_stone");
+			}
+		});
+	});
+  </script>
+</head>
 <body>
   <h1>Hello World!</h1>
+  <div class="playarea">
+	  
+		<div class="board">
+			<div class="grid"></div>
+		</div>
+		
+		<div class="game" id>
+		
+		  <div id="aa"></div>
+		  <div id="ab"></div>
+		  <div id="ac"></div>
+		  <div id="ad"></div>
+		  <div id="ae"></div>
+		  <div id="af"></div>
+		  <div id="ag"></div>
+		  <div id="ah"></div>
+		  <div id="ai"></div>
+		  
+		  <div id="ba"></div>
+		  <div id="bb"></div>
+		  <div id="bc"></div>
+		  <div id="bd"></div>
+		  <div id="be"></div>
+		  <div id="bf"></div>
+		  <div id="bg"></div>
+		  <div id="bh"></div>
+		  <div id="bi"></div>
+		  
+		  <div id="ca"></div>
+		  <div id="cb"></div>
+		  <div id="cc"></div>
+		  <div id="cd"></div>
+		  <div id="ce"></div>
+		  <div id="cf"></div>
+		  <div id="cg"></div>
+		  <div id="ch"></div>
+		  <div id="ci"></div>
+		  
+		  <div id="da"></div>
+		  <div id="db"></div>
+		  <div id="dc"></div>
+		  <div id="dd"></div>
+		  <div id="de"></div>
+		  <div id="df"></div>
+		  <div id="dg"></div>
+		  <div id="dh"></div>
+		  <div id="di"></div>
+		  
+		  <div id="ea"></div>
+		  <div id="eb"></div>
+		  <div id="ec"></div>
+		  <div id="ed"></div>
+		  <div id="ee"></div>
+		  <div id="ef"></div>
+		  <div id="eg"></div>
+		  <div id="eh"></div>
+		  <div id="ei"></div>
+		  
+		  <div id="fa"></div>
+		  <div id="fb"></div>
+		  <div id="fc"></div>
+		  <div id="fd"></div>
+		  <div id="fe"></div>
+		  <div id="ff"></div>
+		  <div id="fg"></div>
+		  <div id="fh"></div>
+		  <div id="fi"></div>
+		  
+		  <div id="ga"></div>
+		  <div id="gb"></div>
+		  <div id="gc"></div>
+		  <div id="gd"></div>
+		  <div id="ge"></div>
+		  <div id="gf"></div>
+		  <div id="gg"></div>
+		  <div id="gh"></div>
+		  <div id="gi"></div>
+		  
+		  <div id="ha"></div>
+		  <div id="hb"></div>
+		  <div id="hc"></div>
+		  <div id="hd"></div>
+		  <div id="he"></div>
+		  <div id="hf"></div>
+		  <div id="hg"></div>
+		  <div id="hh"></div>
+		  <div id="hi"></div>
+		  
+		  <div id="ia"></div>
+		  <div id="ib"></div>
+		  <div id="ic"></div>
+		  <div id="id"></div>
+		  <div id="ie"></div>
+		  <div id="if"></div>
+		  <div id="ig"></div>
+		  <div id="ih"></div>
+		  <div id="ii"></div>
+		</div>
+	</div>
 </body>
 </html>
