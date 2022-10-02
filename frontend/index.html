@@ -52,27 +52,23 @@
   </style>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
   <script>
-	function toggle(stone) {
-		if ($(stone).hasClass("b_stone")) {
-			$(stone).removeClass("b_stone");
-			$(stone).addClass("w_stone");
-		} else if ($(stone).hasClass("w_stone")) {
-			$(stone).removeClass("w_stone");
+	
+	var activePlayer = "b";
+	
+	function togglePlayer() {
+		if (activePlayer == "b") {
+			activePlayer = "w";
 		} else {
-			$(stone).addClass("b_stone");
+			activePlayer = "b";
 		}
 	}
 	
 	$(function() {
 	    console.log('ready!');
 		$('div.game div').click(function() {
-			if ($(this).hasClass("b_stone")) {
-				$(this).removeClass("b_stone");
-				$(this).addClass("w_stone");
-			} else if ($(this).hasClass("w_stone")) {
-				$(this).removeClass("w_stone");
-			} else {
-				$(this).addClass("b_stone");
+		    if (!($(this).hasClass("b_stone") || $(this).hasClass("w_stone"))) {
+				$(this).addClass(activePlayer + "_stone");
+				togglePlayer();
 			}
 		});
 	});
