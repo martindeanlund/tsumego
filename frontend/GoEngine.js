@@ -1,4 +1,5 @@
-class gridNode {
+class GridNode {
+	
   constructor(x, y, color) {
     this.x = x;
 	this.y = y;
@@ -6,75 +7,101 @@ class gridNode {
   }
 }
 
-class group {
+class Group {
+	
   constructor(node) {
     this.nodes = [node];
-	this.liberties = getAdjacentGridNodes(node).filter(node.color == null);
+	this.liberties = getAdjacentGridNodes(node).filter((node) => node.color == null);
   }
   
   removeLiberty(x, y) {
-    for (liberty in this.liberties)
-	  if (liberty.x == x && liberty.y == y)
-	    liberties.remove(liberty);
-	if (liberties.size() < 1)
-	  this.capture();
+	this.liberties = this.liberties.filter((liberty) => !(liberty.x == x && liberty.y == y));
+	if (this.liberties.length < 1) {
+	  return this.capture();
+	}
+	return [];
   }
   
   capture() {
-    captures(this.nodes[0].color) += this.nodes.size();
-	for (node in this.nodes)
-	  grid[node.x, node.y] = null;
-	groups.remove(this);
+	var captures = [];
+	this.nodes.forEach(function(node) {
+		grid[node.x][node.y] = null;
+		captures.push(node);
+	});
+    groups.splice(groups.indexOf(this), 1);
+	return captures;
+  }
+  
+  merge(newGroup) {
+	  newGroup.liberties = newGroup.liberties.concat(this.liberties);
+	  newGroup.nodes = newGroup.nodes.concat(this.nodes);
+	  groups.splice(groups.indexOf(this), 1);
+	  return newGroup;
   }
 }
+
+var grid = Array.from(Array(9), () => new Array(9));
+var groups = [];
+var lastLine = 'i';
+var gridMax = lastLine.charCodeAt() - 'a'.charCodeAt();
 
 function getAdjacentGridNodes(node) {
   var results = []
   if (node.x != 0)
-    results.add(new gridNode(node.x - 1, node.y, grid[node.x - 1, node.y]);
-  if (node.x != 19)
-    results.add(new gridNode(node.x + 1, node.y, grid[node.x + 1, node.y]);
+    results.push(new GridNode(node.x - 1, node.y, grid[node.x - 1][node.y]));
+  if (node.x != gridMax)
+    results.push(new GridNode(node.x + 1, node.y, grid[node.x + 1][node.y]));
   if (node.y != 0)
-    results.add(new gridNode(node.x, node.y -1, grid[node.x, node.y - 1]);
-  if (node.y != 19)
-    results.add(new gridNode(node.x, node.y + 1, grid[node.x, node.y + 1]);
+    results.push(new GridNode(node.x, node.y -1, grid[node.x][node.y - 1]));
+  if (node.y != gridMax)
+    results.push(new GridNode(node.x, node.y + 1, grid[node.x][node.y + 1]));
+  return results;
 }
-  
-
-var grid = Array.from(Array(19), () => new Array(19));
-var groups = [];
 
 function findGroup(x, y) {
-  for (group in groups)
-    for (node in nodes)
-	  if (node.x == x && node.y == y)
-	    return group;
+  var results = [];
+  results = groups.filter(function(group) {
+	  return group.nodes.filter((node) => node.x == x && node.y == y).length > 0;
+  });
+  if (results.length > 0) {
+	  return results[0];
+  }
+  return null;
+}
 
-function move(x, y, color) {
-  if (grid[x,y] == null) {
+function move(char_x, char_y, color) {
+  var x = char_x.charCodeAt() - 'a'.charCodeAt();
+  var y = char_y.charCodeAt() - 'a'.charCodeAt();
+  var captures = [];
+  if (grid[x][y] != null) {
     console.log('Error!');
   } else {
-    grid[x,y] = color;
-	node = new Node(x, y, color);
+    grid[x][y] = color;
+	node = new GridNode(x, y, color);
 	adjacents = getAdjacentGridNodes(node);
     var friends = [];
 	var foes = [];
-	for (adjacent in adjacents) {
+	adjacents.forEach(function(adjacent) {
+	  console.log(adjacent);
 	  if (adjacent.color && adjacent.color != color)
-	    foes.add(findGroup(adjacent.x, adjacent.y);
+	    foes.push(findGroup(adjacent.x, adjacent.y));
 	  else if (adjacent.color && adjacent.color == color)
-	    friends.add(findGroup(adjacent.x, adjacent.y);
+	    friends.push(findGroup(adjacent.x, adjacent.y));
+	});
 		
-    for (foe in foes)
-	  foe.removeLiberty(x, y);
+    foes.forEach(function(foe) {
+		captures = captures.concat(foe.removeLiberty(x, y));
+	});
 	  
     var newGroup = new Group(node);
-    groups.add(newGroup);
+    groups.push(newGroup);
 	
-    for (friend in friends)
-	  newGroup = friend.merge(new Group(node));
+    for (i=0;i<friends.length;i++) {
+	  newGroup = friends[i].merge(newGroup);
 	}
 	
+	captures = captures.concat(newGroup.removeLiberty(x, y));
 	
+	return captures.map((node) => "" + String.fromCharCode('a'.charCodeAt() + node.x) + String.fromCharCode('a'.charCodeAt() + node.y));
   }
 }

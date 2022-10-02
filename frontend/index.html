@@ -51,6 +51,7 @@
 	
   </style>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <script src="./goEngine.js"></script>
   <script>
 	
 	var activePlayer = "b";
@@ -62,12 +63,15 @@
 			activePlayer = "b";
 		}
 	}
-	
+		
 	$(function() {
 	    console.log('ready!');
 		$('div.game div').click(function() {
 		    if (!($(this).hasClass("b_stone") || $(this).hasClass("w_stone"))) {
 				$(this).addClass(activePlayer + "_stone");
+				console.log("Playing stone at " + $(this).attr('id').charAt(0) + "," + $(this).attr('id').charAt(1));
+				captures = move($(this).attr('id').charAt(0), $(this).attr('id').charAt(1), activePlayer);
+				captures.forEach((capture) => $("#"+capture).removeClass("b_stone w_stone"));
 				togglePlayer();
 			}
 		});
@@ -85,93 +89,93 @@
 		<div class="game" id>
 		
 		  <div id="aa"></div>
-		  <div id="ab"></div>
-		  <div id="ac"></div>
-		  <div id="ad"></div>
-		  <div id="ae"></div>
-		  <div id="af"></div>
-		  <div id="ag"></div>
-		  <div id="ah"></div>
-		  <div id="ai"></div>
-		  
 		  <div id="ba"></div>
-		  <div id="bb"></div>
-		  <div id="bc"></div>
-		  <div id="bd"></div>
-		  <div id="be"></div>
-		  <div id="bf"></div>
-		  <div id="bg"></div>
-		  <div id="bh"></div>
-		  <div id="bi"></div>
-		  
 		  <div id="ca"></div>
-		  <div id="cb"></div>
-		  <div id="cc"></div>
-		  <div id="cd"></div>
-		  <div id="ce"></div>
-		  <div id="cf"></div>
-		  <div id="cg"></div>
-		  <div id="ch"></div>
-		  <div id="ci"></div>
-		  
 		  <div id="da"></div>
-		  <div id="db"></div>
-		  <div id="dc"></div>
-		  <div id="dd"></div>
-		  <div id="de"></div>
-		  <div id="df"></div>
-		  <div id="dg"></div>
-		  <div id="dh"></div>
-		  <div id="di"></div>
-		  
 		  <div id="ea"></div>
-		  <div id="eb"></div>
-		  <div id="ec"></div>
-		  <div id="ed"></div>
-		  <div id="ee"></div>
-		  <div id="ef"></div>
-		  <div id="eg"></div>
-		  <div id="eh"></div>
-		  <div id="ei"></div>
-		  
 		  <div id="fa"></div>
-		  <div id="fb"></div>
-		  <div id="fc"></div>
-		  <div id="fd"></div>
-		  <div id="fe"></div>
-		  <div id="ff"></div>
-		  <div id="fg"></div>
-		  <div id="fh"></div>
-		  <div id="fi"></div>
-		  
 		  <div id="ga"></div>
-		  <div id="gb"></div>
-		  <div id="gc"></div>
-		  <div id="gd"></div>
-		  <div id="ge"></div>
-		  <div id="gf"></div>
-		  <div id="gg"></div>
-		  <div id="gh"></div>
-		  <div id="gi"></div>
-		  
 		  <div id="ha"></div>
-		  <div id="hb"></div>
-		  <div id="hc"></div>
-		  <div id="hd"></div>
-		  <div id="he"></div>
-		  <div id="hf"></div>
-		  <div id="hg"></div>
-		  <div id="hh"></div>
-		  <div id="hi"></div>
-		  
 		  <div id="ia"></div>
+		
+		  <div id="ab"></div>
+		  <div id="bb"></div>
+		  <div id="cb"></div>
+		  <div id="db"></div>
+		  <div id="eb"></div>
+		  <div id="fb"></div>
+		  <div id="gb"></div>
+		  <div id="hb"></div>
 		  <div id="ib"></div>
+		
+		  <div id="ac"></div>
+		  <div id="bc"></div>
+		  <div id="cc"></div>
+		  <div id="dc"></div>
+		  <div id="ec"></div>
+		  <div id="fc"></div>
+		  <div id="gc"></div>
+		  <div id="hc"></div>
 		  <div id="ic"></div>
+		
+		  <div id="ad"></div>
+		  <div id="bd"></div>
+		  <div id="cd"></div>
+		  <div id="dd"></div>
+		  <div id="ed"></div>
+		  <div id="fd"></div>
+		  <div id="gd"></div>
+		  <div id="hd"></div>
 		  <div id="id"></div>
+		
+		  <div id="ae"></div>
+		  <div id="be"></div>
+		  <div id="ce"></div>
+		  <div id="de"></div>
+		  <div id="ee"></div>
+		  <div id="fe"></div>
+		  <div id="ge"></div>
+		  <div id="he"></div>
 		  <div id="ie"></div>
+		
+		  <div id="af"></div>
+		  <div id="bf"></div>
+		  <div id="cf"></div>
+		  <div id="df"></div>
+		  <div id="ef"></div>
+		  <div id="ff"></div>
+		  <div id="gf"></div>
+		  <div id="hf"></div>
 		  <div id="if"></div>
+		
+		  <div id="ag"></div>
+		  <div id="bg"></div>
+		  <div id="cg"></div>
+		  <div id="dg"></div>
+		  <div id="eg"></div>
+		  <div id="fg"></div>
+		  <div id="gg"></div>
+		  <div id="hg"></div>
 		  <div id="ig"></div>
+		
+		  <div id="ah"></div>
+		  <div id="bh"></div>
+		  <div id="ch"></div>
+		  <div id="dh"></div>
+		  <div id="eh"></div>
+		  <div id="fh"></div>
+		  <div id="gh"></div>
+		  <div id="hh"></div>
 		  <div id="ih"></div>
+		
+		  <div id="ai"></div>
+		  <div id="bi"></div>
+		  <div id="ci"></div>
+		  <div id="di"></div>
+		  <div id="ei"></div>
+		  <div id="fi"></div>
+		  <div id="gi"></div>
+		  <div id="hi"></div>
 		  <div id="ii"></div>
 		</div>
 	</div>
