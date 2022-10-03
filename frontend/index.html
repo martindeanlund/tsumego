@@ -67,6 +67,7 @@
 	function sgfMove(x, y, c) {
 		$("#" + x + y).addClass(c + "_stone");
 		captures = move(x, y, c);
+		console.log(captures);
 		captures.forEach((capture) => $("#" + capture).removeClass("b_stone w_stone"));
 	}
 		

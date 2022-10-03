@@ -62,7 +62,6 @@ function getAdjacentGridNodes(node) {
 function findGroup(x, y) {
   var results = [];
   results = groups.filter(function(group) {
-	  console.log(group);
 	  return group.nodes.filter((node) => node.x == x && node.y == y).length > 0;
   });
   if (results.length > 0) {
@@ -85,7 +84,7 @@ function move(char_x, char_y, color) {
 	var foes = [];
 	adjacents.forEach(function(adj) {
 	  if (grid[adj.x][adj.y] && grid[adj.x][adj.y] != color)
-	    captures = findGroup(adj.x, adj.y).healthCheck();
+	    captures = captures.concat(findGroup(adj.x, adj.y).healthCheck());
 	  else if (grid[adj.x][adj.y] && grid[adj.x][adj.y] == color)
 	    friends.push(findGroup(adj.x, adj.y));
 	});
@@ -98,7 +97,6 @@ function move(char_x, char_y, color) {
 	}
 	
 	captures = captures.concat(newGroup.healthCheck());
-	
 	return captures.map((node) => "" + String.fromCharCode('a'.charCodeAt() + node.x) + String.fromCharCode('a'.charCodeAt() + node.y));
   }
 }
