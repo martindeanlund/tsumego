@@ -3,7 +3,6 @@ class GridNode {
   constructor(x, y, color) {
     this.x = x;
 	this.y = y;
-	this.color = color;
   }
 }
 
@@ -12,11 +11,10 @@ class Group {
   constructor(node, color) {
 	this.color = color;
     this.nodes = [node];
-	this.liberties = getAdjacentGridNodes(node).filter((node) => node.color != color);
+	this.liberties = getAdjacentGridNodes(node).filter((n) => grid[n.x][n.y] != color);
   }
   
-  removeLiberty(x, y) {
-	this.liberties = this.liberties.filter((liberty) => !(liberty.x == x && liberty.y == y));
+  healthCheck() {
 	var openLiberty = this.liberties.find(g => grid[g.x][g.y] == null);
 	if (openLiberty == null) {
 	  return this.capture();
@@ -35,8 +33,9 @@ class Group {
   }
   
   merge(newGroup) {
+	  this.liberties.splice(this.liberties.indexOf(this.liberties.find((lib) => lib.x == newGroup.nodes[0].x && lib.y == newGroup.nodes[0].y)), 1);
 	  newGroup.liberties = newGroup.liberties.concat(this.liberties);
-	  newGroup.nodes = newGroup.nodes.concat(this.nodes);
+	  newGroup.nodes = [...new Set(newGroup.nodes.concat(this.nodes))];
 	  groups.splice(groups.indexOf(this), 1);
 	  return newGroup;
   }
@@ -63,6 +62,7 @@ function getAdjacentGridNodes(node) {
 function findGroup(x, y) {
   var results = [];
   results = groups.filter(function(group) {
+	  console.log(group);
 	  return group.nodes.filter((node) => node.x == x && node.y == y).length > 0;
   });
   if (results.length > 0) {
@@ -79,20 +79,15 @@ function move(char_x, char_y, color) {
     console.log('Error!');
   } else {
     grid[x][y] = color;
-	node = new GridNode(x, y, color);
+	node = new GridNode(x, y);
 	adjacents = getAdjacentGridNodes(node);
     var friends = [];
 	var foes = [];
-	adjacents.forEach(function(adjacent) {
-	  console.log(adjacent);
-	  if (adjacent.color && adjacent.color != color)
-	    foes.push(findGroup(adjacent.x, adjacent.y));
-	  else if (adjacent.color && adjacent.color == color)
-	    friends.push(findGroup(adjacent.x, adjacent.y));
-	});
-		
-    foes.forEach(function(foe) {
-		captures = captures.concat(foe.removeLiberty(x, y));
+	adjacents.forEach(function(adj) {
+	  if (grid[adj.x][adj.y] && grid[adj.x][adj.y] != color)
+	    captures = findGroup(adj.x, adj.y).healthCheck();
+	  else if (grid[adj.x][adj.y] && grid[adj.x][adj.y] == color)
+	    friends.push(findGroup(adj.x, adj.y));
 	});
 	  
     var newGroup = new Group(node, color);
@@ -102,7 +97,7 @@ function move(char_x, char_y, color) {
 	  newGroup = friends[i].merge(newGroup);
 	}
 	
-	captures = captures.concat(newGroup.removeLiberty(x, y));
+	captures = captures.concat(newGroup.healthCheck());
 	
 	return captures.map((node) => "" + String.fromCharCode('a'.charCodeAt() + node.x) + String.fromCharCode('a'.charCodeAt() + node.y));
   }

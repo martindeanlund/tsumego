@@ -63,15 +63,18 @@
 			activePlayer = "b";
 		}
 	}
+	
+	function sgfMove(x, y, c) {
+		$("#" + x + y).addClass(c + "_stone");
+		captures = move(x, y, c);
+		captures.forEach((capture) => $("#" + capture).removeClass("b_stone w_stone"));
+	}
 		
 	$(function() {
 	    console.log('ready!');
 		$('div.game div').click(function() {
 		    if (!($(this).hasClass("b_stone") || $(this).hasClass("w_stone"))) {
-				$(this).addClass(activePlayer + "_stone");
-				console.log("Playing stone at " + $(this).attr('id').charAt(0) + "," + $(this).attr('id').charAt(1));
-				captures = move($(this).attr('id').charAt(0), $(this).attr('id').charAt(1), activePlayer);
-				captures.forEach((capture) => $("#"+capture).removeClass("b_stone w_stone"));
+				sgfMove($(this).attr('id').charAt(0), $(this).attr('id').charAt(1), activePlayer);
 				togglePlayer();
 			}
 		});
